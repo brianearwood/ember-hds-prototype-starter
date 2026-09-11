@@ -1,0 +1,9 @@
+'use strict';
+
+module.exports = {
+  extends: ['stylelint-config-standard', 'stylelint-prettier/recommended'],
+  customSyntax: 'postcss-scss',
+  rules: {
+    'import-notation': null,
+  },
+};

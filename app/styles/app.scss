@@ -1,0 +1,59 @@
+@import "@hashicorp/design-system-components";
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  color: var(--token-color-foreground-primary);
+  background: var(--token-color-surface-primary);
+  font-family: var(--token-typography-font-stack-text);
+}
+
+.prototype-brand {
+  color: var(--token-color-foreground-high-contrast);
+  font-weight: var(--token-typography-font-weight-semibold);
+  text-decoration: none;
+}
+
+.prototype-header-context {
+  color: var(--token-color-foreground-high-contrast);
+  font-size: var(--token-typography-body-100-font-size);
+}
+
+.prototype-main {
+  display: grid;
+  gap: 24px;
+  padding: 32px;
+}
+
+.prototype-section {
+  display: grid;
+  gap: 16px;
+}
+
+.prototype-section-heading {
+  margin: 0;
+  color: var(--token-color-foreground-strong);
+  font-size: var(--token-typography-display-300-font-size);
+  line-height: var(--token-typography-display-300-line-height);
+}
+
+.prototype-code {
+  font-family: var(--token-typography-font-stack-code);
+  font-size: var(--token-typography-code-100-font-size);
+}
+
+@media (width <= 767px) {
+  .prototype-main {
+    padding: 24px 16px;
+  }
+}

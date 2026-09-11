@@ -1,0 +1,103 @@
+{{page-title "HDS prototype starter"}}
+
+<Hds::AppFrame as |Frame|>
+  <Frame.Header>
+    <Hds::AppHeader>
+      <:logo>
+        <a class="prototype-brand" href="/">HDS prototype</a>
+      </:logo>
+      <:globalActions>
+        <span class="prototype-header-context">Replace with project context</span>
+      </:globalActions>
+    </Hds::AppHeader>
+  </Frame.Header>
+
+  <Frame.Sidebar>
+    <Hds::AppSideNav @isCollapsible={{true}}>
+      <Hds::AppSideNav::List aria-label="Prototype navigation" as |Nav|>
+        <Nav.Title>Prototype</Nav.Title>
+        <Nav.Link
+          @icon="dashboard"
+          @text="Overview"
+          @href="/"
+          @isActive={{true}}
+        />
+        <Nav.Link @icon="settings" @text="Settings" @href="#settings" />
+      </Hds::AppSideNav::List>
+    </Hds::AppSideNav>
+  </Frame.Sidebar>
+
+  <Frame.Main>
+    <main class="prototype-main" id="hds-main">
+      <Hds::PageHeader as |PH|>
+        <PH.Title>Prototype starter</PH.Title>
+        <PH.Breadcrumb>
+          <Hds::Breadcrumb>
+            <Hds::Breadcrumb::Item @text="Prototypes" @icon="folder" />
+            <Hds::Breadcrumb::Item @text="Starter" />
+          </Hds::Breadcrumb>
+        </PH.Breadcrumb>
+        <PH.IconTile @icon="dashboard" />
+        <PH.Badges>
+          <Hds::Badge @text="HDS ready" @color="success" />
+        </PH.Badges>
+        <PH.Description>
+          Build product-specific flows with real Helios components, semantic
+          tokens, and typed fixture data.
+        </PH.Description>
+        <PH.Actions>
+          <Hds::Button
+            @text="HDS documentation"
+            @icon="external-link"
+            @iconPosition="trailing"
+            @color="secondary"
+            @href="https://helios.hashicorp.design/components"
+          />
+        </PH.Actions>
+      </Hds::PageHeader>
+
+      <Hds::Alert @type="inline" @color="highlight" as |A|>
+        <A.Title>Start with behavior, then compose with HDS</A.Title>
+        <A.Description>
+          Put reusable scenarios in
+          <code class="prototype-code">app/data</code>
+          and keep custom CSS limited to layout and product-specific patterns.
+        </A.Description>
+      </Hds::Alert>
+
+      <section class="prototype-section" aria-labelledby="scenario-heading">
+        <h2 class="prototype-section-heading" id="scenario-heading">
+          Example scenario fixtures
+        </h2>
+
+        <Hds::Table @caption="Example prototype scenarios">
+          <:head as |H|>
+            <H.Tr>
+              <H.Th>Scenario</H.Th>
+              <H.Th>Description</H.Th>
+              <H.Th>Status</H.Th>
+            </H.Tr>
+          </:head>
+          <:body as |B|>
+            {{#each this.prototypeScenarios as |scenario|}}
+              <B.Tr>
+                <B.Th>
+                  <code class="prototype-code">{{scenario.name}}</code>
+                </B.Th>
+                <B.Td>{{scenario.description}}</B.Td>
+                <B.Td>
+                  <Hds::Badge
+                    @text={{scenario.statusText}}
+                    @color={{scenario.status}}
+                  />
+                </B.Td>
+              </B.Tr>
+            {{/each}}
+          </:body>
+        </Hds::Table>
+      </section>
+
+      {{outlet}}
+    </main>
+  </Frame.Main>
+</Hds::AppFrame>
