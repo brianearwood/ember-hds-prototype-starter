@@ -5,5 +5,6 @@ module.exports = {
   customSyntax: 'postcss-scss',
   rules: {
     'import-notation': null,
+    'at-rule-no-unknown': [true, { ignoreAtRules: ['use'] }],
   },
 };
