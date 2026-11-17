@@ -53,14 +53,14 @@ The starter contains a representative HDS screen rather than an exhaustive compo
 app/
 ├── components/
 ├── controllers/
-│   └── application.ts
 ├── data/
 │   └── prototype-scenarios.ts
 ├── routes/
 ├── styles/
 │   └── app.scss
-└── templates/
-    └── application.hbs
+├── templates/
+│   └── application.gts
+└── deprecation-workflow.ts
 
 tests/
 ├── acceptance/
@@ -72,6 +72,7 @@ tests/
 As the prototype grows:
 
 - Use routes for major navigable product surfaces.
+- Author route templates and components as `.gts` files. Ember CLI generators produce this format by default.
 - Use components for reusable or stateful sections within a surface.
 - Keep scenarios, roles, permissions, and example records in typed data modules.
 - Keep custom styles scoped to the component or product pattern that owns them.
@@ -80,7 +81,8 @@ As the prototype grows:
 
 ```sh
 pnpm start       # Start the Vite development server
-pnpm lint        # Run JavaScript, TypeScript, template, and CSS checks
+pnpm lint        # Run JavaScript, TypeScript, template, CSS, and formatting checks
+pnpm lint:fix    # Fix lint issues and format files
 pnpm test:ember  # Build in development mode and run browser tests
 pnpm test        # Run lint and browser tests
 pnpm build       # Create a production build in dist/
@@ -102,6 +104,14 @@ HDS components provide supported:
 - Visual consistency
 
 Consult the [HDS component documentation](https://helios.hashicorp.design/components) before creating a local component.
+
+Import HDS components by name in `.gts` files so templates are type-checked against their arguments:
+
+```gts
+import { HdsBadge } from '@hashicorp/design-system-components/components';
+
+<template><HdsBadge @text="Ready" @color="success" /></template>
+```
 
 ### Use semantic design tokens
 
@@ -177,13 +187,13 @@ Add acceptance tests for the scenario and role combinations that are important t
 
 ## Compatibility
 
-| Dependency | Version |
-|---|---:|
-| Node.js | 22 |
-| Ember | 6.12 LTS |
-| HDS components | 7.1 |
-| HDS tokens | 6.0 |
-| Flight icons | 5.3 |
+| Dependency     |  Version |
+| -------------- | -------: |
+| Node.js        |       22 |
+| Ember          | 6.12 LTS |
+| HDS components |      7.1 |
+| HDS tokens     |      6.0 |
+| Flight icons   |      5.3 |
 
 The starter uses the Vite and Embroider build pipeline from the Ember CLI 6.12 app blueprint. Build configuration lives in `vite.config.mjs`, `babel.config.mjs`, and `ember-cli-build.mjs`, and the app entry point is `index.html` at the repository root.
 
