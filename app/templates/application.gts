@@ -12,9 +12,17 @@ import {
   HdsPageHeader,
   HdsTable,
 } from '@hashicorp/design-system-components/components';
-import { prototypeScenarios } from 'ember-hds-prototype/data/prototype-scenarios';
+import type { TOC } from '@ember/component/template-only';
+import PrototypeToolbar from 'ember-hds-prototype/components/prototype-toolbar';
+import type ApplicationController from 'ember-hds-prototype/controllers/application';
 
-<template>
+const eq = (a: unknown, b: unknown): boolean => a === b;
+
+interface ApplicationSignature {
+  Args: { controller: ApplicationController };
+}
+
+export default <template>
   {{pageTitle "HDS prototype starter"}}
 
   <HdsAppFrame as |Frame|>
@@ -24,7 +32,14 @@ import { prototypeScenarios } from 'ember-hds-prototype/data/prototype-scenarios
           <a class="prototype-brand" href="/">HDS prototype</a>
         </:logo>
         <:globalActions>
-          <span class="prototype-header-context">Replace with project context</span>
+          <PrototypeToolbar
+            @scenarios={{@controller.prototypeState.scenarios}}
+            @personas={{@controller.prototypeState.personas}}
+            @selectedScenario={{@controller.prototypeState.selectedScenario}}
+            @selectedPersona={{@controller.prototypeState.selectedPersona}}
+            @onSelectScenario={{@controller.selectScenario}}
+            @onSelectPersona={{@controller.selectPersona}}
+          />
         </:globalActions>
       </HdsAppHeader>
     </Frame.Header>
@@ -64,6 +79,16 @@ import { prototypeScenarios } from 'ember-hds-prototype/data/prototype-scenarios
           </PH.Description>
           <PH.Actions>
             <HdsButton
+              @text="Edit"
+              @icon="edit"
+              disabled={{if (@controller.prototypeState.can "edit") false true}}
+              aria-describedby={{unless
+                (@controller.prototypeState.can "edit")
+                "edit-permission-note"
+              }}
+              data-test-edit-action
+            />
+            <HdsButton
               @text="HDS documentation"
               @icon="external-link"
               @iconPosition="trailing"
@@ -82,6 +107,25 @@ import { prototypeScenarios } from 'ember-hds-prototype/data/prototype-scenarios
           </A.Description>
         </HdsAlert>
 
+        {{#unless (@controller.prototypeState.can "edit")}}
+          <HdsAlert
+            @type="inline"
+            @color="neutral"
+            id="edit-permission-note"
+            data-test-permission-note
+            as |A|
+          >
+            <A.Title>Read-only access</A.Title>
+            <A.Description>
+              {{@controller.prototypeState.selectedPersona.name}}
+              has
+              {{@controller.prototypeState.selectedPersona.permissionLabel}}
+              and cannot edit. Switch personas in the prototype toolbar to try
+              another permission level.
+            </A.Description>
+          </HdsAlert>
+        {{/unless}}
+
         <section class="prototype-section" aria-labelledby="scenario-heading">
           <h2 class="prototype-section-heading" id="scenario-heading">
             Example scenario fixtures
@@ -96,7 +140,7 @@ import { prototypeScenarios } from 'ember-hds-prototype/data/prototype-scenarios
               </H.Tr>
             </:head>
             <:body as |B|>
-              {{#each prototypeScenarios as |scenario|}}
+              {{#each @controller.prototypeState.scenarios as |scenario|}}
                 <B.Tr>
                   <B.Th>
                     <code class="prototype-code">{{scenario.name}}</code>
@@ -107,6 +151,14 @@ import { prototypeScenarios } from 'ember-hds-prototype/data/prototype-scenarios
                       @text={{scenario.statusText}}
                       @color={{scenario.status}}
                     />
+                    {{#if
+                      (eq
+                        scenario.id
+                        @controller.prototypeState.selectedScenarioId
+                      )
+                    }}
+                      <HdsBadge @text="Selected" @color="highlight" />
+                    {{/if}}
                   </B.Td>
                 </B.Tr>
               {{/each}}
@@ -118,4 +170,4 @@ import { prototypeScenarios } from 'ember-hds-prototype/data/prototype-scenarios
       </main>
     </Frame.Main>
   </HdsAppFrame>
-</template>
+</template> satisfies TOC<ApplicationSignature>;

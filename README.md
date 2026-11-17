@@ -29,6 +29,7 @@ Create one repository per substantial product prototype or research initiative. 
 - HDS product design tokens
 - Flight icons
 - A responsive HDS application shell
+- A prototype toolbar for switching scenarios and personas, synced to the URL
 - Example navigation, page header, alert, table, badges, and actions
 - Typed scenario fixture conventions
 - ESLint, Stylelint, Prettier, and Ember Template Lint
@@ -58,10 +59,15 @@ The starter contains a representative HDS screen rather than an exhaustive compo
 └── copilot-instructions.md
 app/
 ├── components/
+│   └── prototype-toolbar.gts
 ├── controllers/
+│   └── application.ts
 ├── data/
+│   ├── prototype-personas.ts
 │   └── prototype-scenarios.ts
 ├── routes/
+├── services/
+│   └── prototype-state.ts
 ├── styles/
 │   └── app.scss
 ├── templates/
@@ -106,6 +112,12 @@ pnpm test:node   # Run Node tests for build configuration
 pnpm test        # Run lint, browser tests, and Node tests
 pnpm build       # Create a production build in dist/
 ```
+
+## Scenarios and personas
+
+The toolbar in the application header switches between the scenarios in `app/data/prototype-scenarios.ts` and the personas in `app/data/prototype-personas.ts`. The selection is stored in the `scenario` and `persona` query params, so any state can be shared with a link. Unknown ids in a link fall back to `defaultScenarioId` and `defaultPersonaId`.
+
+`PrototypeStateService` holds the selection. Use `prototypeState.can('edit')` to check a persona's capabilities, and explain unavailable actions instead of hiding them. Add capabilities to `PrototypeCapability` as the prototype needs them, and reset scenario-specific state in `selectScenario`.
 
 ## Prototype documents
 
