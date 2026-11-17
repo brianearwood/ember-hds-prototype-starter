@@ -34,6 +34,10 @@ Create one repository per substantial product prototype or research initiative. 
 - ESLint, Stylelint, Prettier, and Ember Template Lint
 - Browser acceptance tests
 - GitHub Actions CI
+- Social preview metadata and release channels
+- Product, design specification, and migration document templates
+- A `reference/` folder convention for preserved source artifacts
+- Copilot instructions
 
 The starter contains a representative HDS screen rather than an exhaustive component catalog. Add components as the prototype requires them.
 
@@ -50,6 +54,8 @@ The starter contains a representative HDS screen rather than an exhaustive compo
 ## Project structure
 
 ```text
+.github/
+└── copilot-instructions.md
 app/
 ├── components/
 ├── controllers/
@@ -62,11 +68,23 @@ app/
 │   └── application.gts
 └── deprecation-workflow.ts
 
+config/
+├── prototype.mjs
+└── social-metadata.mjs
+
+reference/
+└── README.md
+
 tests/
 ├── acceptance/
 │   └── application-test.ts
 ├── integration/
+├── node/
 └── unit/
+
+PRODUCT.md
+DESIGN-SPEC.md
+MIGRATION.md
 ```
 
 As the prototype grows:
@@ -84,9 +102,35 @@ pnpm start       # Start the Vite development server
 pnpm lint        # Run JavaScript, TypeScript, template, CSS, and formatting checks
 pnpm lint:fix    # Fix lint issues and format files
 pnpm test:ember  # Build in development mode and run browser tests
-pnpm test        # Run lint and browser tests
+pnpm test:node   # Run Node tests for build configuration
+pnpm test        # Run lint, browser tests, and Node tests
 pnpm build       # Create a production build in dist/
 ```
+
+## Prototype documents
+
+Fill in these files when you create a prototype from the starter. Copilot reads them through `.github/copilot-instructions.md`.
+
+| File                                                                 | Purpose                                                                                   |
+| -------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
+| [`PRODUCT.md`](PRODUCT.md)                                           | Users, purpose, constraints, and principles for the product area.                         |
+| [`DESIGN-SPEC.md`](DESIGN-SPEC.md)                                   | Handoff specification for engineers implementing the behavior in production.              |
+| [`MIGRATION.md`](MIGRATION.md)                                       | Milestone tracker for migrating an earlier prototype. Delete it if you are not migrating. |
+| [`reference/`](reference/README.md)                                  | Read-only source artifacts, such as an earlier HTML concept, with their source SHAs.      |
+| [`.github/copilot-instructions.md`](.github/copilot-instructions.md) | Conventions for Copilot and other coding agents.                                          |
+
+## Social previews and release channels
+
+`config/prototype.mjs` defines the prototype name, description, and release channels. A Vite plugin in `config/social-metadata.mjs` uses them to set the page title, description, Open Graph, and Twitter card metadata in `index.html` at build time.
+
+Each deployment is assigned one release channel. By default, `main` is **Stable** and every other branch is **Preview**, so you can share a stable link and a preview link for the same prototype. The channel is resolved in this order:
+
+1. `PROTOTYPE_RELEASE_CHANNEL`, if set. An unknown value fails the build.
+2. The first channel whose `branches` include `PROTOTYPE_BRANCH` or Vercel's `VERCEL_GIT_COMMIT_REF`.
+3. The channel marked `isProduction`, when `VERCEL_ENV` is `production`.
+4. `defaultChannel`.
+
+Social cards are optional. Add a 1200×630 PNG at `public/social-card-<channel>.png` (for example `public/social-card-preview.png`) or a shared `public/social-card.png`. Set `PROTOTYPE_PUBLIC_URL` to the deployment's origin so the image URL is absolute; on Vercel, `VERCEL_URL` is used automatically.
 
 ## Working conventions
 
