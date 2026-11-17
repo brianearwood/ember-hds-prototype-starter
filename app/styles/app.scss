@@ -13,20 +13,20 @@ body {
 
 body {
   margin: 0;
-  color: var(--token-color-foreground-primary);
-  background: var(--token-color-surface-primary);
-  font-family: var(--token-typography-font-stack-text);
+  color: var(--hds-foreground-color-primary);
+  background: var(--hds-surface-color-primary);
+  font-family: var(--hds-typography-font-stack-text);
 }
 
 .prototype-brand {
-  color: var(--token-color-foreground-high-contrast);
-  font-weight: var(--token-typography-font-weight-semibold);
+  color: var(--hds-foreground-color-high-contrast);
+  font-weight: var(--hds-typography-font-weight-semibold);
   text-decoration: none;
 }
 
 .prototype-header-context {
-  color: var(--token-color-foreground-high-contrast);
-  font-size: var(--token-typography-body-100-font-size);
+  color: var(--hds-foreground-color-high-contrast);
+  font-size: var(--hds-typography-body-100-font-size);
 }
 
 .prototype-main {
@@ -42,14 +42,14 @@ body {
 
 .prototype-section-heading {
   margin: 0;
-  color: var(--token-color-foreground-strong);
-  font-size: var(--token-typography-display-300-font-size);
-  line-height: var(--token-typography-display-300-line-height);
+  color: var(--hds-foreground-color-strong);
+  font-size: var(--hds-typography-display-300-font-size);
+  line-height: var(--hds-typography-display-300-line-height);
 }
 
 .prototype-code {
-  font-family: var(--token-typography-font-stack-code);
-  font-size: var(--token-typography-code-100-font-size);
+  font-family: var(--hds-typography-font-stack-code);
+  font-size: var(--hds-typography-code-100-font-size);
 }
 
 @media (width <= 767px) {

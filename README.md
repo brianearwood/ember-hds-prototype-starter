@@ -108,13 +108,13 @@ Use semantic HDS tokens for product-specific layouts and patterns:
 
 ```scss
 .prototype-surface {
-  color: var(--token-color-foreground-primary);
-  background: var(--token-color-surface-primary);
-  border: 1px solid var(--token-color-border-primary);
+  color: var(--hds-foreground-color-primary);
+  background: var(--hds-surface-color-primary);
+  border: 1px solid var(--hds-border-color-primary);
 }
 
 .prototype-secondary-text {
-  color: var(--token-color-foreground-faint);
+  color: var(--hds-foreground-color-faint);
 }
 ```
 
@@ -179,12 +179,12 @@ Add acceptance tests for the scenario and role combinations that are important t
 | Dependency | Version |
 |---|---:|
 | Node.js | 22 |
-| Ember | 5.12 LTS |
-| HDS components | 6.5 |
-| HDS tokens | 5.1 |
-| Flight icons | 5.1 |
+| Ember | 6.12 LTS |
+| HDS components | 7.1 |
+| HDS tokens | 6.0 |
+| Flight icons | 5.3 |
 
-The starter currently uses the Ember 5.12 classic build pipeline. During initial evaluation, a dependency included with HDS 6.5 could not be bundled by the Ember 7 Vite pipeline.
+The starter uses the Ember classic build pipeline with the `use-ember-modules` optional feature enabled. It has not been migrated to the Vite and Embroider pipeline used by new Ember 6.12 apps.
 
 Reassess this constraint when upgrading HDS or Ember.
 
