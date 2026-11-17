@@ -18,13 +18,13 @@ pnpm install
 pnpm start
 ```
 
-Open [http://localhost:4200](http://localhost:4200).
+Open [http://localhost:5173](http://localhost:5173).
 
 Create one repository per substantial product prototype or research initiative. Use routes for related flows and branches for short-lived design experiments rather than creating a repository for every screen.
 
 ## What is included
 
-- Ember with TypeScript
+- Ember with TypeScript, built with Vite and Embroider
 - Helios Design System components
 - HDS product design tokens
 - Flight icons
@@ -79,10 +79,11 @@ As the prototype grows:
 ## Commands
 
 ```sh
-pnpm start       # Start the development server
+pnpm start       # Start the Vite development server
 pnpm lint        # Run JavaScript, TypeScript, template, and CSS checks
-pnpm test:ember  # Run browser tests
-pnpm build       # Create a production build
+pnpm test:ember  # Build in development mode and run browser tests
+pnpm test        # Run lint and browser tests
+pnpm build       # Create a production build in dist/
 ```
 
 ## Working conventions
@@ -184,9 +185,9 @@ Add acceptance tests for the scenario and role combinations that are important t
 | HDS tokens | 6.0 |
 | Flight icons | 5.3 |
 
-The starter uses the Ember classic build pipeline with the `use-ember-modules` optional feature enabled. It has not been migrated to the Vite and Embroider pipeline used by new Ember 6.12 apps.
+The starter uses the Vite and Embroider build pipeline from the Ember CLI 6.12 app blueprint. Build configuration lives in `vite.config.mjs`, `babel.config.mjs`, and `ember-cli-build.mjs`, and the app entry point is `index.html` at the repository root.
 
-Reassess this constraint when upgrading HDS or Ember.
+Styles are compiled by Vite's built-in Sass support. `app/app.ts` imports `app/styles/app.scss`, and `vite.config.mjs` adds the HDS tokens and components style directories to the Sass load paths so `@use "@hashicorp/design-system-components";` resolves.
 
 ## Updating HDS
 
