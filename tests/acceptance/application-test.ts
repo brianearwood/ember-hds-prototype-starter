@@ -91,6 +91,10 @@ module('Acceptance | application', function (hooks) {
     assert
       .dom('[data-test-inspect-source]')
       .includesText('app/templates/application.gts:');
+    assert
+      .dom('[data-test-inspect-typography-source]')
+      .includesText('hds-button__text');
+    assert.dom('[data-test-inspect-panel]').includesText('Font size 14px');
 
     await triggerKeyEvent(document, 'keydown', 'Escape');
 
