@@ -26,6 +26,9 @@ application.
   under `app/data/`. Do not build markup with strings or `innerHTML`.
 - Keep simulated behavior explicit. Do not add success-shaped fallbacks or
   represent unsupported behavior as complete.
+- Forward `...attributes` to the root element of custom components so Inspect
+  Mode can select them. Inspect Mode comes from the `ember-prototype-inspector`
+  package; fix it there rather than copying its code into this repository.
 - Prototype identity, release channels, and social previews are configured in
   `config/prototype.mjs`.
 

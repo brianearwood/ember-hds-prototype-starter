@@ -48,6 +48,17 @@ body {
   gap: 8px;
 }
 
+.prototype-inspect-toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-right: 8px;
+  color: var(--hds-foreground-color-high-contrast);
+  font-weight: var(--hds-typography-font-weight-medium);
+  white-space: nowrap;
+  cursor: pointer;
+}
+
 .prototype-menu-secondary {
   margin-left: 8px;
   color: var(--hds-foreground-color-faint);

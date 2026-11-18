@@ -1,4 +1,4 @@
-import { click, currentURL, visit } from '@ember/test-helpers';
+import { click, currentURL, triggerKeyEvent, visit } from '@ember/test-helpers';
 import { module, test } from 'qunit';
 import { setupApplicationTest } from 'ember-hds-prototype/tests/helpers';
 
@@ -74,5 +74,27 @@ module('Acceptance | application', function (hooks) {
       expectedFontFamily,
       'the body font uses the HDS text font stack',
     );
+  });
+
+  test('inspects stamped components and exits with Escape', async function (assert) {
+    await visit('/');
+    await click('[data-test-inspect-toggle]');
+
+    assert.strictEqual(currentURL(), '/?inspect=true');
+    assert
+      .dom('[data-test-edit-action]')
+      .hasAttribute('data-inspect-component', 'Hds::Button');
+
+    await click('[data-test-edit-action]');
+
+    assert.dom('[data-test-inspect-panel] h2').hasText('Hds::Button');
+    assert
+      .dom('[data-test-inspect-source]')
+      .includesText('app/templates/application.gts:');
+
+    await triggerKeyEvent(document, 'keydown', 'Escape');
+
+    assert.strictEqual(currentURL(), '/');
+    assert.dom('[data-test-inspect-panel]').doesNotExist();
   });
 });

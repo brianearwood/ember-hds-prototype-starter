@@ -3,6 +3,7 @@ import { concat, fn } from '@ember/helper';
 import { on } from '@ember/modifier';
 import {
   HdsDropdown,
+  HdsFormToggleBase,
   HdsIcon,
 } from '@hashicorp/design-system-components/components';
 import type { PrototypePersona } from 'ember-hds-prototype/data/prototype-personas';
@@ -16,6 +17,8 @@ interface PrototypeToolbarSignature {
     selectedPersona: PrototypePersona;
     onSelectScenario: (id: string) => void;
     onSelectPersona: (id: string) => void;
+    isInspecting: boolean;
+    onToggleInspect: (enabled: boolean) => void;
   };
   Element: HTMLElement;
 }
@@ -26,6 +29,12 @@ export default class PrototypeToolbar extends Component<PrototypeToolbarSignatur
   select = (onSelect: (id: string) => void, id: string, close: () => void) => {
     onSelect(id);
     close();
+  };
+
+  toggleInspect = (event: Event) => {
+    if (event.target instanceof HTMLInputElement) {
+      this.args.onToggleInspect(event.target.checked);
+    }
   };
 
   <template>
@@ -40,6 +49,16 @@ export default class PrototypeToolbar extends Component<PrototypeToolbarSignatur
       </div>
 
       <div class="prototype-toolbar-controls">
+        {{! data-inspect-ui keeps the toggle usable while Inspect Mode is on. }}
+        <label class="prototype-inspect-toggle" data-inspect-ui>
+          <HdsFormToggleBase
+            checked={{@isInspecting}}
+            {{on "change" this.toggleInspect}}
+            data-test-inspect-toggle
+          />
+          Inspect
+        </label>
+
         <HdsDropdown
           @listPosition="bottom-right"
           @width="320px"

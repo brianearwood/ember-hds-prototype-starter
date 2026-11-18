@@ -1,6 +1,7 @@
 import Controller from '@ember/controller';
 import { action } from '@ember/object';
 import { service } from '@ember/service';
+import { tracked } from '@glimmer/tracking';
 import type PrototypeStateService from 'ember-hds-prototype/services/prototype-state';
 import { defaultPersonaId } from 'ember-hds-prototype/data/prototype-personas';
 import { defaultScenarioId } from 'ember-hds-prototype/data/prototype-scenarios';
@@ -8,7 +9,9 @@ import { defaultScenarioId } from 'ember-hds-prototype/data/prototype-scenarios'
 export default class ApplicationController extends Controller {
   @service declare prototypeState: PrototypeStateService;
 
-  queryParams = ['scenario', 'persona'];
+  queryParams = ['scenario', 'persona', 'inspect'];
+
+  @tracked inspect = false;
 
   // Unknown ids in a shared URL fall back to the defaults.
   get scenario(): string {
@@ -39,5 +42,15 @@ export default class ApplicationController extends Controller {
   @action
   selectPersona(id: string): void {
     this.persona = id;
+  }
+
+  @action
+  toggleInspect(enabled: boolean): void {
+    this.inspect = enabled;
+  }
+
+  @action
+  exitInspect(): void {
+    this.inspect = false;
   }
 }

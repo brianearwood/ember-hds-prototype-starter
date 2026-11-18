@@ -13,6 +13,7 @@ import {
   HdsTable,
 } from '@hashicorp/design-system-components/components';
 import type { TOC } from '@ember/component/template-only';
+import InspectMode from 'ember-prototype-inspector/components/inspect-mode';
 import PrototypeToolbar from 'ember-hds-prototype/components/prototype-toolbar';
 import type ApplicationController from 'ember-hds-prototype/controllers/application';
 
@@ -39,6 +40,8 @@ export default <template>
             @selectedPersona={{@controller.prototypeState.selectedPersona}}
             @onSelectScenario={{@controller.selectScenario}}
             @onSelectPersona={{@controller.selectPersona}}
+            @isInspecting={{@controller.inspect}}
+            @onToggleInspect={{@controller.toggleInspect}}
           />
         </:globalActions>
       </HdsAppHeader>
@@ -170,4 +173,8 @@ export default <template>
       </main>
     </Frame.Main>
   </HdsAppFrame>
+
+  {{#if @controller.inspect}}
+    <InspectMode @onExit={{@controller.exitInspect}} />
+  {{/if}}
 </template> satisfies TOC<ApplicationSignature>;

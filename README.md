@@ -30,6 +30,7 @@ Create one repository per substantial product prototype or research initiative. 
 - Flight icons
 - A responsive HDS application shell
 - A prototype toolbar for switching scenarios and personas, synced to the URL
+- Inspect Mode from [`ember-prototype-inspector`](https://www.npmjs.com/package/ember-prototype-inspector) for reviewing components, source locations, and tokens
 - Example navigation, page header, alert, table, badges, and actions
 - Typed scenario fixture conventions
 - ESLint, Stylelint, Prettier, and Ember Template Lint
@@ -118,6 +119,18 @@ pnpm build       # Create a production build in dist/
 The toolbar in the application header switches between the scenarios in `app/data/prototype-scenarios.ts` and the personas in `app/data/prototype-personas.ts`. The selection is stored in the `scenario` and `persona` query params, so any state can be shared with a link. Unknown ids in a link fall back to `defaultScenarioId` and `defaultPersonaId`.
 
 `PrototypeStateService` holds the selection. Use `prototypeState.can('edit')` to check a persona's capabilities, and explain unavailable actions instead of hiding them. Add capabilities to `PrototypeCapability` as the prototype needs them, and reset scenario-specific state in `selectScenario`.
+
+## Inspect Mode
+
+Turn on **Inspect** in the toolbar, or add `?inspect=true` to a URL, to review the prototype with [`ember-prototype-inspector`](https://github.com/brianearwood/ember-prototype-kit/tree/main/packages/ember-prototype-inspector). Click an element to see its component, source file and line, invocation, typography, spacing, and design tokens. Alt-click to use a control while inspecting, and press Escape to exit.
+
+A template transform in `babel.config.mjs` stamps this metadata onto elements at build time, including production builds, so reviewers can inspect deployed previews. Set `INSPECT_METADATA=false` to build without it.
+
+Custom components must forward `...attributes` to their root element so they can be selected. Add `data-inspect-note="..."` to explain intent to reviewers, or `data-inspect-skip` to exclude an element. Get fixes with a dependency update:
+
+```sh
+pnpm update ember-prototype-inspector
+```
 
 ## Prototype documents
 
