@@ -30,7 +30,8 @@
     "lint:types": "ember-tsc --noEmit",
     "start": "vite",
     "test": "concurrently \"npm:lint\" \"npm:test:*\" --names \"lint,test:\"",
-    "test:ember": "vite build --mode development && ember test --path dist"
+    "test:ember": "vite build --mode development && ember test --path dist",
+    "test:node": "node --test \"tests/node/**/*.test.mjs\""
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
@@ -67,6 +68,7 @@
     "ember-load-initializers": "^3.0.1",
     "ember-modifier": "^4.3.0",
     "ember-page-title": "^9.1.0",
+    "ember-prototype-inspector": "^0.1.1",
     "ember-qunit": "^9.2.1",
     "ember-resolver": "^13.2.0",
     "ember-source": "~6.12.1",

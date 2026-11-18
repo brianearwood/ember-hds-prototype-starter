@@ -2,6 +2,8 @@ import { fileURLToPath } from 'node:url';
 import { defineConfig } from 'vite';
 import { extensions, classicEmberSupport, ember } from '@embroider/vite';
 import { babel } from '@rollup/plugin-babel';
+import prototype from './config/prototype.mjs';
+import { socialMetadataPlugin } from './config/social-metadata.mjs';
 
 const fromNodeModules = (path) =>
   fileURLToPath(new URL(`./node_modules/${path}`, import.meta.url));
@@ -20,7 +22,7 @@ export default defineConfig({
   plugins: [
     classicEmberSupport(),
     ember(),
-    // extra plugins here
+    socialMetadataPlugin(prototype),
     babel({
       babelHelpers: 'runtime',
       extensions,

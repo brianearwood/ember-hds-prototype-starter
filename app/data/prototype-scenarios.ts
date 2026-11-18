@@ -6,7 +6,9 @@ export interface PrototypeScenario {
   statusText: string;
 }
 
-export const prototypeScenarios: PrototypeScenario[] = [
+export const defaultScenarioId = 'baseline';
+
+export const prototypeScenarios: readonly PrototypeScenario[] = [
   {
     id: 'baseline',
     name: 'Baseline',

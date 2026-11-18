@@ -4,6 +4,9 @@ import {
   babelCompatSupport,
   templateCompatSupport,
 } from '@embroider/compat/babel';
+import inspectMetadata from 'ember-prototype-inspector/template-transform';
+
+const root = dirname(fileURLToPath(import.meta.url));
 
 export default {
   plugins: [
@@ -23,7 +26,13 @@ export default {
           'ember-cli-htmlbars-inline-precompile',
           'htmlbars-inline-precompile',
         ],
-        transforms: [...templateCompatSupport()],
+        transforms: [
+          ...templateCompatSupport(),
+          inspectMetadata({
+            root,
+            enabled: process.env.INSPECT_METADATA !== 'false',
+          }),
+        ],
       },
     ],
     [

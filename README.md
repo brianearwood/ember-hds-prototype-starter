@@ -29,11 +29,17 @@ Create one repository per substantial product prototype or research initiative. 
 - HDS product design tokens
 - Flight icons
 - A responsive HDS application shell
+- A prototype toolbar for switching scenarios and personas, synced to the URL
+- Inspect Mode from [`ember-prototype-inspector`](https://www.npmjs.com/package/ember-prototype-inspector) for reviewing components, source locations, and tokens
 - Example navigation, page header, alert, table, badges, and actions
 - Typed scenario fixture conventions
 - ESLint, Stylelint, Prettier, and Ember Template Lint
 - Browser acceptance tests
 - GitHub Actions CI
+- Social preview metadata and release channels
+- Product, design specification, and migration document templates
+- A `reference/` folder convention for preserved source artifacts
+- Copilot instructions
 
 The starter contains a representative HDS screen rather than an exhaustive component catalog. Add components as the prototype requires them.
 
@@ -50,23 +56,42 @@ The starter contains a representative HDS screen rather than an exhaustive compo
 ## Project structure
 
 ```text
+.github/
+└── copilot-instructions.md
 app/
 ├── components/
+│   └── prototype-toolbar.gts
 ├── controllers/
+│   └── application.ts
 ├── data/
+│   ├── prototype-personas.ts
 │   └── prototype-scenarios.ts
 ├── routes/
+├── services/
+│   └── prototype-state.ts
 ├── styles/
 │   └── app.scss
 ├── templates/
 │   └── application.gts
 └── deprecation-workflow.ts
 
+config/
+├── prototype.mjs
+└── social-metadata.mjs
+
+reference/
+└── README.md
+
 tests/
 ├── acceptance/
 │   └── application-test.ts
 ├── integration/
+├── node/
 └── unit/
+
+PRODUCT.md
+DESIGN-SPEC.md
+MIGRATION.md
 ```
 
 As the prototype grows:
@@ -84,9 +109,53 @@ pnpm start       # Start the Vite development server
 pnpm lint        # Run JavaScript, TypeScript, template, CSS, and formatting checks
 pnpm lint:fix    # Fix lint issues and format files
 pnpm test:ember  # Build in development mode and run browser tests
-pnpm test        # Run lint and browser tests
+pnpm test:node   # Run Node tests for build configuration
+pnpm test        # Run lint, browser tests, and Node tests
 pnpm build       # Create a production build in dist/
 ```
+
+## Scenarios and personas
+
+The toolbar in the application header switches between the scenarios in `app/data/prototype-scenarios.ts` and the personas in `app/data/prototype-personas.ts`. The selection is stored in the `scenario` and `persona` query params, so any state can be shared with a link. Unknown ids in a link fall back to `defaultScenarioId` and `defaultPersonaId`.
+
+`PrototypeStateService` holds the selection. Use `prototypeState.can('edit')` to check a persona's capabilities, and explain unavailable actions instead of hiding them. Add capabilities to `PrototypeCapability` as the prototype needs them, and reset scenario-specific state in `selectScenario`.
+
+## Inspect Mode
+
+Turn on **Inspect** in the toolbar, or add `?inspect=true` to a URL, to review the prototype with [`ember-prototype-inspector`](https://github.com/brianearwood/ember-prototype-kit/tree/main/packages/ember-prototype-inspector). Click an element to see its component, source file and line, invocation, typography, spacing, and design tokens. Alt-click to use a control while inspecting, and press Escape to exit.
+
+A template transform in `babel.config.mjs` stamps this metadata onto elements at build time, including production builds, so reviewers can inspect deployed previews. Set `INSPECT_METADATA=false` to build without it.
+
+Custom components must forward `...attributes` to their root element so they can be selected. Add `data-inspect-note="..."` to explain intent to reviewers, or `data-inspect-skip` to exclude an element. Get fixes with a dependency update:
+
+```sh
+pnpm update ember-prototype-inspector
+```
+
+## Prototype documents
+
+Fill in these files when you create a prototype from the starter. Copilot reads them through `.github/copilot-instructions.md`.
+
+| File                                                                 | Purpose                                                                                   |
+| -------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
+| [`PRODUCT.md`](PRODUCT.md)                                           | Users, purpose, constraints, and principles for the product area.                         |
+| [`DESIGN-SPEC.md`](DESIGN-SPEC.md)                                   | Handoff specification for engineers implementing the behavior in production.              |
+| [`MIGRATION.md`](MIGRATION.md)                                       | Milestone tracker for migrating an earlier prototype. Delete it if you are not migrating. |
+| [`reference/`](reference/README.md)                                  | Read-only source artifacts, such as an earlier HTML concept, with their source SHAs.      |
+| [`.github/copilot-instructions.md`](.github/copilot-instructions.md) | Conventions for Copilot and other coding agents.                                          |
+
+## Social previews and release channels
+
+`config/prototype.mjs` defines the prototype name, description, and release channels. A Vite plugin in `config/social-metadata.mjs` uses them to set the page title, description, Open Graph, and Twitter card metadata in `index.html` at build time.
+
+Each deployment is assigned one release channel. By default, `main` is **Stable** and every other branch is **Preview**, so you can share a stable link and a preview link for the same prototype. The channel is resolved in this order:
+
+1. `PROTOTYPE_RELEASE_CHANNEL`, if set. An unknown value fails the build.
+2. The first channel whose `branches` include `PROTOTYPE_BRANCH` or Vercel's `VERCEL_GIT_COMMIT_REF`.
+3. The channel marked `isProduction`, when `VERCEL_ENV` is `production`.
+4. `defaultChannel`.
+
+Social cards are optional. Add a 1200×630 PNG at `public/social-card-<channel>.png` (for example `public/social-card-preview.png`) or a shared `public/social-card.png`. Set `PROTOTYPE_PUBLIC_URL` to the deployment's origin so the image URL is absolute; on Vercel, `VERCEL_URL` is used automatically.
 
 ## Working conventions
 
